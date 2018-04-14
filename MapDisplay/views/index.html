@@ -15,6 +15,19 @@
         margin: 0;
         padding: 0;
       }
+      #legend {
+        font-family: Arial, sans-serif;
+        background: #fff;
+        padding: 10px;
+        margin: 10px;
+        border: 3px solid #000;
+      }
+      #legend h3 {
+        margin-top: 0;
+      }
+      #legend img {
+        vertical-align: middle;
+      }
       #floating-panel {
         position: absolute;
         top: 10px;
@@ -83,24 +96,12 @@
     </div>
     </div>
     <div id="map"></div>
-
+    <div id="legend"><h3> <font color="black">Legend</font></h3></div>
     <script>
         var positiveArray = [];
         var negativeArray = [];
         var neutralArray = [];
         var map, heatmapPositive, heatmapNegative;
-        // $.get('/api/coordinates',function(data, status) {
-        //   var parsedData = data.data;
-        //   parsedData.forEach(function(element) {
-        //     if(element.value > 0){
-        //       positiveArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
-        //     } else if (element.value < 0) {
-        //       negativeArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
-        //     } else {
-        //       neutralArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
-        //     }
-        //   })
-        // })
 
         function getData(callback) {
           $.ajax({url: '/api/coordinates', success: callback});
@@ -123,6 +124,22 @@
             center: {lat: 34.000471, lng: -81.041786},
             mapTypeId: 'satellite'
           });
+
+          var iconBase = 'https://localhost:3000';
+          var icons = {
+            parking: {
+              name: 'Positive',
+              icon: '/images/positive.png'
+            },
+            library: {
+              name: 'Neutral',
+              icon: '/images/neutral.png'
+            },
+            info: {
+              name: 'Negative',
+              icon: '/images/negative.png'
+            }
+          };
 
           heatmapPositive = new google.maps.visualization.HeatmapLayer({
             data: positiveArray,
@@ -173,6 +190,17 @@
           heatmapNegative.set('radius', heatmapNegative.get('radius') ? null : 30);
           heatmapNeutral.set('radius', heatmapNeutral.get('radius') ? null : 30);
           heatmapPositive.set('radius', heatmapPositive.get('radius') ? null : 30);
+          var legend = document.getElementById('legend');
+          for (var key in icons) {
+            var type = icons[key];
+            var name = type.name;
+            var icon = type.icon;
+            var div = document.createElement('div');
+            div.innerHTML = '<img src="' + icon + '"> ' + '<font color="black">' + name + '</font>' ;
+            legend.appendChild(div);
+          }
+
+map.controls[google.maps.ControlPosition.TOP_RIGHT].push(legend);
         }
 
         // Call async method and pass the map function as the callback
