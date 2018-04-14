@@ -14,6 +14,7 @@ import tweepy
 from tweepy import OAuthHandler
 from textblob import TextBlob
 import os
+import time
 
 class TwitterClient(object):
     '''
@@ -84,8 +85,7 @@ class TwitterClient(object):
             print("Error : " + str(e))
 
 
-
-def main():
+def output():
     api = TwitterClient()
     tweets = api.get_tweets(query = ' ', count = 200)
 
@@ -93,17 +93,22 @@ def main():
     ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
     ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
 
-    print("\n\nPositive tweets:")
-    for tweet in ptweets[:10]:
-        print(tweet['text'])
-    print("\n\nNegative tweets:")
-    for tweet in ntweets[:10]:
-        print(tweet['text'])
+    # print("\n\nPositive tweets:")
+    # for tweet in ptweets[:10]:
+    #     print(tweet['text'])
+    # print("\n\nNegative tweets:")
+    # for tweet in ntweets[:10]:
+    #     print(tweet['text'])
 
 
     print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets)))
     print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets)))
 
+def main():
+    while(True):
+        output()
+        print(time.ctime())
+        time.sleep(10)
 
 
 if __name__ == "__main__":
