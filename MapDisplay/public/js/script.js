@@ -12,29 +12,35 @@ function createMap(data) {
     sentimentDates.push(element.date.substring(10,19))
   });
 
-Chart.defaults.global.defaultFontColor = "#ffffff";
+  Chart.defaults.global.defaultFontColor = "#ffffff";
 
   var ctx = document.getElementById("line-chart").getContext('2d');
   var myChart = new Chart(ctx, {
     type: 'line',
-    scaleFontColor: '#ffffff',
     data: {
       labels: sentimentDates,
       datasets: [{
-          data: sentimentValues,
-          label: "sentiment values",
-          borderColor: "#0f0f0a",
-          fill: false
-        },
-      ]
+        data: sentimentValues,
+        label: "sentiment values",
+        borderColor: "#6ABEDB",
+        fill: false
+      },
+    ]
+  },
+  options: {
+    title: {
+      display: true,
+      text: 'Sentiment of Columbia'
     },
-    options: {
-      title: {
-        display: true,
-        text: 'Sentiment of Columbia'
-      }
+    scales: {
+      xAxes: [{
+        ticks: {
+          maxTicksLimit: 100,
+        }
+      }]
     }
-  });
+  }
+});
 }
 
 getData(createMap)
