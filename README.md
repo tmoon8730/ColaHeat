@@ -5,17 +5,17 @@ Display general sentiment of social media activity in the Columbia area in the f
 # Tech Stack
 - Database
   - MongoDB
-  
+
 - Data parser
   - Python 2.7
-  - Tweepy
-  - Textblob
+  - Tweepy - python client for twitter api
+  - Textblob - python library for processing textual data
 
 - Map Display
   - Expressjs
   - Javascript
   - HTML
-  - Boostrap
+  - Bootstrap
 
 ## Usuage
 
