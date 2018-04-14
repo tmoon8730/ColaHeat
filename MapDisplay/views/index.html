@@ -43,6 +43,8 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
     <div>
@@ -58,7 +60,9 @@
       <div class="jumbotron">
         <p>
         &emsp; Columbia Heatmap based upon sentiment analysis based on local tweets
-      </p>
+        </p>
+      <canvas id="line-chart" width="100%" height="50"></canvas>
+      <script type="text/javascript" src="/js/script.js"></script>
     </div>
     </div>
     <div id="map"></div>
