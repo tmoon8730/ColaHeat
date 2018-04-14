@@ -20,7 +20,7 @@ function createMap(data) {
     data: {
       labels: sentimentDates,
       datasets: [{
-        data: sentimentValues,
+        data: sentimentValues.slice(-250),
         label: "sentiment values",
         borderColor: "#6ABEDB",
         fill: false
