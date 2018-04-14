@@ -20,6 +20,7 @@ Display general sentiment of social media activity in the Columbia area in the f
 ## Usage
 - [Create a virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)
 - Install requirements: `pip install -r requirements.txt`
+- Install: python -m textblob.download_corpora
 
 # Contributors
   - Tyler Moon
