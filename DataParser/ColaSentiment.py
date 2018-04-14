@@ -15,6 +15,13 @@ from tweepy import OAuthHandler
 from textblob import TextBlob
 import os
 import time
+from pymongo import MongoClient
+from random import randint
+
+# Connection Data
+client = MongoClient('mongodb://localhost:27017')
+db = client.ColaHeat
+
 
 class TwitterClient(object):
     '''
@@ -107,12 +114,65 @@ def output():
     print("Positive tweets percentage: {} %".format(posPercent))
     print("Negative tweets percentage: {} %".format(negPercent))
 
+    update(posPercent,negPercent);
+
+def update(positiveValue, negativeValue):
+    old = db.data.find_one({})
+    old['positive'].append({'percent': positiveValue,'date': time.ctime()})
+    old['negative'].append({'percent': negativeValue,'date': time.ctime()})
+    result = db.data.replace_one({'_id': old.get('_id') }, old, True);
+
 def main():
     while(True):
         output()
         print(time.ctime())
         time.sleep(10)
 
+    # names = ['Kitchen','Animal','State', 'Tastey', 'Big','City','Fish', 'Pizza','Goat', 'Salty','Sandwich','Lazy', 'Fun']
+    # company_type = ['LLC','Inc','Company','Corporation']
+    # company_cuisine = ['Pizza', 'Bar Food', 'Fast Food', 'Italian', 'Mexican', 'American', 'Sushi Bar', 'Vegetarian']
+    # for x in xrange(1, 501):
+    #     business = {
+    #         'name' : names[randint(0, (len(names)-1))] + ' ' + names[randint(0, (len(names)-1))]  + ' ' + company_type[randint(0, (len(company_type)-1))],
+    #         'rating' : randint(1, 5),
+    #         'cuisine' : company_cuisine[randint(0, (len(company_cuisine)-1))]
+    #     }
+    # result = db.reviews.insert_one(business)
+    # print('Created {0} of 100 as {1}'.format(x,result.inserted_id))
 
+
+    # outputData = {
+    #     'positive': [
+    #         {
+    #             'percent': '24',
+    #             'date': time.ctime()
+    #         },
+    #         {
+    #             'percent': '30',
+    #             'date': time.ctime()
+    #         }
+    #     ],
+    #     'negative': [
+    #         {
+    #             'percent': '24',
+    #             'date': time.ctime()
+    #         },
+    #         {
+    #             'percent': '30',
+    #             'date': time.ctime()
+    #         }
+    #     ],
+    # }
+    #
+    # db.data.insert_one(outputData);
+
+    # posUpdate = outputData['positive']#.extend({'percent':'55','date': time.ctime()})
+    # a = []
+    # print(result.inserted_id)
+    # old = db.data.find_one({})
+    # b = {'percent':'65','date': time.ctime()}
+    # old['positive'].append(b)
+    # # print(outputData)
+    # result = db.data.replace_one({'_id': old.get('_id') }, old, True);
 if __name__ == "__main__":
     main()
