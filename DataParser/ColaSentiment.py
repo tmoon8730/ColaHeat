@@ -62,7 +62,7 @@ class TwitterClient(object):
         else:
             return 'negative'
 
-    def get_tweets(self, query, count = 10):
+    def get_tweets(self, query, count):
         '''
         Main function to fetch tweets and parse them.
         '''
@@ -71,10 +71,14 @@ class TwitterClient(object):
 
         try:
             # Call the api to get the tweets
-            fetched_tweets = self.api.search(q = query, count = count, geocode="34.000471,-81.041786,50mi")
+            fetched_tweets = self.api.search(q = query, count = count, geocode="34.000471,-81.041786,150mi")
 
             # Parse each tweet
             for tweet in fetched_tweets:
+                # if(tweet._json['coordinates'] != None):
+                #     print(tweet._json['coordinates']['coordinates'])
+                if(tweet._json['place'] != None):
+                    print(tweet._json['place']['bounding_box']['coordinates'][0][0])
                 parsed_tweet = {}
                 parsed_tweet['text'] = tweet.text
                 parsed_tweet['sentiment'] = self.get_tweet_sentiment(tweet.text)
@@ -94,18 +98,18 @@ class TwitterClient(object):
 
 def output():
     api = TwitterClient()
-    tweets = api.get_tweets(query = ' ', count = 200)
+    tweets = api.get_tweets(query = ' ', count = 100)
 
     # Parse out the positive and negative tweets
     ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
     ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
 
-    print("\n\nPositive tweets:")
-    for tweet in ptweets[:2]:
-        print(tweet['text'])
-    print("\n\nNegative tweets:")
-    for tweet in ntweets[:2]:
-        print(tweet['text'])
+    # print("\n\nPositive tweets:")
+    # for tweet in ptweets[:2]:
+    #     print(tweet['text'])
+    # print("\n\nNegative tweets:")
+    # for tweet in ntweets[:2]:
+    #     print(tweet['text'])
 
     posPercent = 100*len(ptweets)/len(tweets)
     negPercent = 100*len(ntweets)/len(tweets)
