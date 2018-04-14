@@ -68,6 +68,10 @@
 
     <script>
 
+        $.get('/api/coordinates',function(data, status) {
+          alert("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+        })
+
         var map, heatmap;
 
         function initMap() {
