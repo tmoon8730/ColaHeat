@@ -2,8 +2,9 @@ var express = require("express");
 var app = express();
 var router = express.Router();
 var path = __dirname + '/views/';
+var path2 = require("path");
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path2.join(__dirname, 'public')));
 
 router.use(function (req,res,next) {
   console.log("/" + req.method);
