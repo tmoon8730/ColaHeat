@@ -18,7 +18,7 @@ function createMap(data) {
   var myChart = new Chart(ctx, {
     type: 'line',
     data: {
-      labels: sentimentDates,
+      labels: sentimentDates.slice(-250),
       datasets: [{
         data: sentimentValues.slice(-250),
         label: "sentiment values",
