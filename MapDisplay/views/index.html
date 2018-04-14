@@ -134,7 +134,24 @@
           'rgba(191, 0, 31, 1)',
           'rgba(255, 0, 0, 1)'
           ]
+          var gradientNeutral = [
+          'rgba(209, 209, 209, 0)',
+          'rgba(204, 204, 204, 1)',
+          'rgba(199, 199, 199, 1)',
+          'rgba(195, 195, 195, 1)',
+          'rgba(190, 190, 190, 1)',
+          'rgba(185, 185, 185, 1)',
+          'rgba(181, 181, 181, 1)',
+          'rgba(176, 176, 176, 1)',
+          'rgba(171, 171, 171, 1)',
+          'rgba(167, 167, 167, 1)',
+          'rgba(162, 162, 162, 1)',
+          'rgba(156, 156, 156, 1)',
+          'rgba(157, 157, 157, 1)',
+          'rgba(146, 146, 146, 1)'
+          ]
           heatmapNegative.set('gradient', heatmapNegative.get('gradient') ? null : gradientNegative);
+          heatmapNeutral.set('gradient', heatmapNeutral.get('gradient') ? null : gradientNeutral);
           heatmapNegative.set('radius', heatmapNegative.get('radius') ? null : 30);
           heatmapNeutral.set('radius', heatmapNeutral.get('radius') ? null : 30);
           heatmapPositive.set('radius', heatmapPositive.get('radius') ? null : 30);
