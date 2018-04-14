@@ -15,6 +15,13 @@ from tweepy import OAuthHandler
 from textblob import TextBlob
 import os
 import time
+from pymongo import MongoClient
+from random import randint
+
+# Connection Data
+client = MongoClient('mongodb://localhost:27017')
+db = client.ColaHeat
+
 
 class TwitterClient(object):
     '''
@@ -49,13 +56,10 @@ class TwitterClient(object):
         '''
         # create TextBlob object of passed tweet text
         analysis = TextBlob(self.clean_tweet(tweet))
-        # Set sentiment
-        if analysis.sentiment.polarity > 0:
-            return 'positive'
-        else:
-            return 'negative'
+        # return sentiment
+        return analysis.sentiment.polarity
 
-    def get_tweets(self, query, count = 10):
+    def get_tweets(self, query, count):
         '''
         Main function to fetch tweets and parse them.
         '''
@@ -64,19 +68,24 @@ class TwitterClient(object):
 
         try:
             # Call the api to get the tweets
-            fetched_tweets = self.api.search(q = query, count = count, geocode="34.000471,-81.041786,50mi")
+            fetched_tweets = self.api.search(q = query, count = count, geocode="34.000471,-81.041786,150mi")
 
             # Parse each tweet
             for tweet in fetched_tweets:
-                parsed_tweet = {}
-                parsed_tweet['text'] = tweet.text
-                parsed_tweet['sentiment'] = self.get_tweet_sentiment(tweet.text)
+                # if(tweet._json['coordinates'] != None):
+                #     print(tweet._json['coordinates']['coordinates'])
+                if(tweet._json['place'] != None):
+                    print(tweet._json['place']['bounding_box']['coordinates'][0][0])
+                    parsed_tweet = {}
+                    parsed_tweet['text'] = tweet.text
+                    parsed_tweet['coordinates'] = tweet._json['place']['bounding_box']['coordinates'][0][0]
+                    parsed_tweet['sentiment'] = self.get_tweet_sentiment(tweet.text)
 
-                if tweet.retweet_count > 0:
-                    if parsed_tweet not in tweets:
+                    if tweet.retweet_count > 0:
+                        if parsed_tweet not in tweets:
+                            tweets.append(parsed_tweet)
+                    else:
                         tweets.append(parsed_tweet)
-                else:
-                    tweets.append(parsed_tweet)
 
             # Return the list of parsed tweets
             return tweets
@@ -87,32 +96,20 @@ class TwitterClient(object):
 
 def output():
     api = TwitterClient()
-    tweets = api.get_tweets(query = ' ', count = 200)
+    tweets = api.get_tweets(query = ' ', count = 100)
+    for tweet in tweets:
+        update(tweet['sentiment'],tweet['coordinates']);
 
-    # Parse out the positive and negative tweets
-    ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
-    ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
-
-    print("\n\nPositive tweets:")
-    for tweet in ptweets[:2]:
-        print(tweet['text'])
-    print("\n\nNegative tweets:")
-    for tweet in ntweets[:2]:
-        print(tweet['text'])
-
-    posPercent = 100*len(ptweets)/len(tweets)
-    negPercent = 100*len(ntweets)/len(tweets)
-
-
-    print("Positive tweets percentage: {} %".format(posPercent))
-    print("Negative tweets percentage: {} %".format(negPercent))
+def update(sentimentValue, coordinates):
+    old = db.data.find_one({})
+    old['data'].append({'value': sentimentValue,'coordinates': coordinates,'date': time.ctime()})
+    result = db.data.replace_one({'_id': old.get('_id') }, old, True);
 
 def main():
     while(True):
         output()
         print(time.ctime())
         time.sleep(10)
-
 
 if __name__ == "__main__":
     main()
