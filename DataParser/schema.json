@@ -1,0 +1,22 @@
+{
+  "postive": [
+    {
+      "percent": "24",
+      "date": "4/16/2018_thing"
+    },
+    {
+      "percent": "30",
+      "date": "4/16/2018_thing"
+    }
+  ],
+  "negative": [
+    {
+      "percent": "24",
+      "date": "4/16/2018_thing"
+    },
+    {
+      "percent": "30",
+      "date": "4/16/2018_thing"
+    }
+  ]
+}
