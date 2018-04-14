@@ -93,16 +93,19 @@ def output():
     ptweets = [tweet for tweet in tweets if tweet['sentiment'] == 'positive']
     ntweets = [tweet for tweet in tweets if tweet['sentiment'] == 'negative']
 
-    # print("\n\nPositive tweets:")
-    # for tweet in ptweets[:10]:
-    #     print(tweet['text'])
-    # print("\n\nNegative tweets:")
-    # for tweet in ntweets[:10]:
-    #     print(tweet['text'])
+    print("\n\nPositive tweets:")
+    for tweet in ptweets[:2]:
+        print(tweet['text'])
+    print("\n\nNegative tweets:")
+    for tweet in ntweets[:2]:
+        print(tweet['text'])
+
+    posPercent = 100*len(ptweets)/len(tweets)
+    negPercent = 100*len(ntweets)/len(tweets)
 
 
-    print("Positive tweets percentage: {} %".format(100*len(ptweets)/len(tweets)))
-    print("Negative tweets percentage: {} %".format(100*len(ntweets)/len(tweets)))
+    print("Positive tweets percentage: {} %".format(posPercent))
+    print("Negative tweets percentage: {} %".format(negPercent))
 
 def main():
     while(True):
