@@ -67,10 +67,23 @@
     <div id="map"></div>
 
     <script>
+        var positiveArray = [];
+        var negativeArray = [];
+        var neutralArray = [];
 
         $.get('/api/coordinates',function(data, status) {
-          alert("Data: " + JSON.stringify(data) + "\nStatus: " + status);
+          var parsedData = data.data;
+          parsedData.forEach(function(element) {
+            if(element.value > 0){
+              positiveArray.push(element.coordinates);
+            } else if (element.value < 0) {
+              negativeArray.push(element.coordinates);
+            } else {
+              neutralArray.push(element.coordinates);
+            }
+          })
         })
+        console.log(positiveArray);
 
         var map, heatmap;
 
