@@ -6,6 +6,7 @@
   },
   "dependencies": {
     "chart.js": "^2.7.2",
-    "express": "latest"
+    "express": "latest",
+    "mongodb": "^3.0.6"
   }
 }
