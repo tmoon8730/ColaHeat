@@ -192,6 +192,20 @@
           heatmapNegative.set('radius', heatmapNegative.get('radius') ? null : 30);
           heatmapNeutral.set('radius', heatmapNeutral.get('radius') ? null : 30);
           heatmapPositive.set('radius', heatmapPositive.get('radius') ? null : 30);
+          // Create marker
+          var marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(34.000471, -81.041786),
+            title: 'Center of Columbia, SC'
+          });
+
+          // Add circle overlay and bind to marker
+          var circle = new google.maps.Circle({
+            map: map,
+            radius: 321869,    // metres
+            fillColor: '#AA0000'
+          });
+          circle.bindTo('center', marker, 'position');
           var legend = document.getElementById('legend');
           for (var key in icons) {
             var type = icons[key];
