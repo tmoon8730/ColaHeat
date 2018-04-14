@@ -9,12 +9,15 @@ function createMap(data) {
   var parsedData = data.data;
   parsedData.forEach(function(element) {
     sentimentValues.push(element.value)
-    sentimentDates.push(element.date.substring(4,10))
+    sentimentDates.push(element.date.substring(10,19))
   });
+
+Chart.defaults.global.defaultFontColor = "#ffffff";
 
   var ctx = document.getElementById("line-chart").getContext('2d');
   var myChart = new Chart(ctx, {
     type: 'line',
+    scaleFontColor: '#ffffff',
     data: {
       labels: sentimentDates,
       datasets: [{
