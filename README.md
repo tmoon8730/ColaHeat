@@ -17,7 +17,8 @@ Display general sentiment of social media activity in the Columbia area in the f
   - HTML
   - Bootstrap
 
-## Usuage
+## Usage
+- [Create a virtualenv](https://packaging.python.org/guides/installing-using-pip-and-virtualenv/)
 
 # Contributors
   - Tyler Moon
