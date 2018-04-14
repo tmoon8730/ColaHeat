@@ -1,21 +1,23 @@
-// load the things we need
-var express = require('express');
+var express = require("express");
 var app = express();
+var router = express.Router();
+var path = __dirname + '/views/';
 
-// set the view engine to ejs
-app.set('view engine', 'ejs');
-
-// use res.render to load up an ejs view file
-
-// index page
-app.get('/', function(req, res) {
-	res.render('pages/index');
+router.use(function (req,res,next) {
+  console.log("/" + req.method);
+  next();
 });
 
-// about page
-app.get('/about', function(req, res) {
-	res.render('pages/about');
+router.get("/",function(req,res){
+  res.sendFile(path + "index.html");
 });
 
-app.listen(3000);
-console.log('3000 is the magic port');
+router.get("/about",function(req,res){
+  res.sendFile(path + "about.html");
+});
+
+app.use("/",router);
+
+app.listen(3000,function(){
+  console.log("Live at Port 3000");
+});
