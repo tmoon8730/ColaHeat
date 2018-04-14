@@ -30,7 +30,7 @@ function createMap(data) {
   options: {
     title: {
       display: true,
-      text: 'Sentiment of South Carolinaish(?) :)'
+      text: 'Sentiment of South Carolinaish(?)'
     },
     scales: {
       xAxes: [{
