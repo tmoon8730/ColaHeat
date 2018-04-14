@@ -72,8 +72,7 @@ class TwitterClient(object):
 
             # Parse each tweet
             for tweet in fetched_tweets:
-                # if(tweet._json['coordinates'] != None):
-                #     print(tweet._json['coordinates']['coordinates'])
+                # If the tweet has a location
                 if(tweet._json['place'] != None):
                     print(tweet._json['place']['bounding_box']['coordinates'][0][0])
                     parsed_tweet = {}
@@ -81,6 +80,7 @@ class TwitterClient(object):
                     parsed_tweet['coordinates'] = tweet._json['place']['bounding_box']['coordinates'][0][0]
                     parsed_tweet['sentiment'] = self.get_tweet_sentiment(tweet.text)
 
+                    # Append to array
                     if tweet.retweet_count > 0:
                         if parsed_tweet not in tweets:
                             tweets.append(parsed_tweet)
@@ -89,27 +89,52 @@ class TwitterClient(object):
 
             # Return the list of parsed tweets
             return tweets
-
         except tweepy.TweepError as e:
             print("Error : " + str(e))
 
 
-def output():
+def worker():
+    '''
+    Method that runs the twitter client and then updates
+    the database
+    '''
+    # Instantiate a Twitter Client
     api = TwitterClient()
+
+    # Get all the tweets that contain a space
     tweets = api.get_tweets(query = ' ', count = 100)
+
+    # For each tweet add the sentiment and coordinates to the db
     for tweet in tweets:
         update(tweet['sentiment'],tweet['coordinates']);
 
 def update(sentimentValue, coordinates):
+    '''
+    Method that adds a given sentimentValue and coordinates
+    array to the database
+    '''
+
+    # Using only one documents so just pull off the first doc
     old = db.data.find_one({})
+
+    # Append to the data array
     old['data'].append({'value': sentimentValue,'coordinates': coordinates,'date': time.ctime()})
-    result = db.data.replace_one({'_id': old.get('_id') }, old, True);
+
+    # Upsert operation
+    db.data.replace_one({'_id': old.get('_id') }, old, True);
+
 
 def main():
+    '''
+    Main method which calls the worker method every 10 seconds
+    '''
     while(True):
-        output()
-        print(time.ctime())
+        worker()
+        print("\nFinished running at: %s\n" % time.ctime())
         time.sleep(10)
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        pass
