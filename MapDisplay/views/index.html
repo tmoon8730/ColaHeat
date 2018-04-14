@@ -118,7 +118,7 @@
             data: neutralArray,
             map: map
           });
-          var gradient = [
+          var gradientNegative = [
           'rgba(0, 255, 255, 0)',
           'rgba(0, 255, 255, 1)',
           'rgba(0, 191, 255, 1)',
@@ -134,7 +134,7 @@
           'rgba(191, 0, 31, 1)',
           'rgba(255, 0, 0, 1)'
           ]
-          heatmapNegative.set('gradient', heatmapNegative.get('gradient') ? null : gradient);
+          heatmapNegative.set('gradient', heatmapNegative.get('gradient') ? null : gradientNegative);
           heatmapNegative.set('radius', heatmapNegative.get('radius') ? null : 30);
           heatmapNeutral.set('radius', heatmapNeutral.get('radius') ? null : 30);
           heatmapPositive.set('radius', heatmapPositive.get('radius') ? null : 30);
