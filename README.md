@@ -3,8 +3,11 @@
 Display general sentiment of social media activity in the Columbia area in the form of a heat map.
 
 # Tech Stack
+- Database
+  - MongoDB
+  
 - Data parser
-  - Python
+  - Python 2.7
   - Tweepy
   - Textblob
 
@@ -13,6 +16,8 @@ Display general sentiment of social media activity in the Columbia area in the f
   - Javascript
   - HTML
   - Boostrap
+
+## Usuage
 
 # Contributors
   - Tyler Moon
