@@ -71,20 +71,35 @@
         var negativeArray = [];
         var neutralArray = [];
         var map, heatmapPositive, heatmapNegative;
-        $.get('/api/coordinates',function(data, status) {
+        // $.get('/api/coordinates',function(data, status) {
+        //   var parsedData = data.data;
+        //   parsedData.forEach(function(element) {
+        //     if(element.value > 0){
+        //       positiveArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
+        //     } else if (element.value < 0) {
+        //       negativeArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
+        //     } else {
+        //       neutralArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
+        //     }
+        //   })
+        // })
+
+        function getData(callback) {
+          $.ajax({url: '/api/coordinates', success: callback});
+        }
+
+        function initMap(data) {
           var parsedData = data.data;
           parsedData.forEach(function(element) {
             if(element.value > 0){
-              positiveArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
+              positiveArray.push(new google.maps.LatLng(element.coordinates[1], element.coordinates[0]));
             } else if (element.value < 0) {
-              negativeArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
+              negativeArray.push(new google.maps.LatLng(element.coordinates[1], element.coordinates[0]));
             } else {
-              neutralArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
+              neutralArray.push(new google.maps.LatLng(element.coordinates[1], element.coordinates[0]));
             }
           })
-        })
 
-        function initMap() {
           map = new google.maps.Map(document.getElementById('map'), {
             zoom: 13,
             center: {lat: 34.000471, lng: -81.041786},
@@ -92,11 +107,11 @@
           });
 
           heatmapPositive = new google.maps.visualization.HeatmapLayer({
-            data: getPointPositive(),
+            data: positiveArray,
             map: map
           });
           heatmapNegative = new google.maps.visualization.HeatmapLayer({
-            data: getPointNegative(),
+            data: negativeArray,
             map: map
           });
           var gradient = [
@@ -118,14 +133,8 @@
           heatmapNegative.set('gradient', heatmapNegative.get('gradient') ? null : gradient);
         }
 
-        // Heatmap data: Positive
-        function getPointPositive() {
-          return positiveArray;
-        }
-        // Heatmap data: Negative
-        function getPointNegative() {
-          return negativeArray;
-        }
+        // Call async method and pass the map function as the callback
+        getData(initMap)
     </script>
 
     <script async defer
