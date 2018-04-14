@@ -101,7 +101,7 @@
           })
 
           map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 13,
+            zoom: 8,
             center: {lat: 34.000471, lng: -81.041786},
             mapTypeId: 'satellite'
           });
@@ -112,6 +112,10 @@
           });
           heatmapNegative = new google.maps.visualization.HeatmapLayer({
             data: negativeArray,
+            map: map
+          });
+          heatmapNeutral = new google.maps.visualization.HeatmapLayer({
+            data: neutralArray,
             map: map
           });
           var gradient = [
@@ -131,6 +135,9 @@
           'rgba(255, 0, 0, 1)'
           ]
           heatmapNegative.set('gradient', heatmapNegative.get('gradient') ? null : gradient);
+          heatmapNegative.set('radius', heatmapNegative.get('radius') ? null : 30);
+          heatmapNeutral.set('radius', heatmapNeutral.get('radius') ? null : 30);
+          heatmapPositive.set('radius', heatmapPositive.get('radius') ? null : 30);
         }
 
         // Call async method and pass the map function as the callback
