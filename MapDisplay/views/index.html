@@ -67,25 +67,58 @@
     <div id="map"></div>
 
     <script>
+        var positiveArray = [];
+        var negativeArray = [];
+        var neutralArray = [];
+        var map, heatmapPositive, heatmapNegative;
+        // $.get('/api/coordinates',function(data, status) {
+        //   var parsedData = data.data;
+        //   parsedData.forEach(function(element) {
+        //     if(element.value > 0){
+        //       positiveArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
+        //     } else if (element.value < 0) {
+        //       negativeArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
+        //     } else {
+        //       neutralArray.push(new google.maps.LatLng(element.coordinates[0], element.coordinates[1]));
+        //     }
+        //   })
+        // })
 
-        var map, heatmap;
+        function getData(callback) {
+          $.ajax({url: '/api/coordinates', success: callback});
+        }
 
-        function initMap() {
+        function initMap(data) {
+          var parsedData = data.data;
+          parsedData.forEach(function(element) {
+            if(element.value > 0){
+              positiveArray.push(new google.maps.LatLng(element.coordinates[1], element.coordinates[0]));
+            } else if (element.value < 0) {
+              negativeArray.push(new google.maps.LatLng(element.coordinates[1], element.coordinates[0]));
+            } else {
+              neutralArray.push(new google.maps.LatLng(element.coordinates[1], element.coordinates[0]));
+            }
+          })
+
           map = new google.maps.Map(document.getElementById('map'), {
-            zoom: 13,
+            zoom: 8,
             center: {lat: 34.000471, lng: -81.041786},
             mapTypeId: 'satellite'
           });
 
           heatmapPositive = new google.maps.visualization.HeatmapLayer({
-            data: getPointPositive(),
+            data: positiveArray,
             map: map
           });
           heatmapNegative = new google.maps.visualization.HeatmapLayer({
-            data: getPointNegative(),
+            data: negativeArray,
             map: map
           });
-          var gradient = [
+          heatmapNeutral = new google.maps.visualization.HeatmapLayer({
+            data: neutralArray,
+            map: map
+          });
+          var gradientNegative = [
           'rgba(0, 255, 255, 0)',
           'rgba(0, 255, 255, 1)',
           'rgba(0, 191, 255, 1)',
@@ -101,21 +134,31 @@
           'rgba(191, 0, 31, 1)',
           'rgba(255, 0, 0, 1)'
           ]
-          heatmapNegative.set('gradient', heatmapNegative.get('gradient') ? null : gradient);
+          var gradientNeutral = [
+          'rgba(209, 209, 209, 0)',
+          'rgba(204, 204, 204, 1)',
+          'rgba(199, 199, 199, 1)',
+          'rgba(195, 195, 195, 1)',
+          'rgba(190, 190, 190, 1)',
+          'rgba(185, 185, 185, 1)',
+          'rgba(181, 181, 181, 1)',
+          'rgba(176, 176, 176, 1)',
+          'rgba(171, 171, 171, 1)',
+          'rgba(167, 167, 167, 1)',
+          'rgba(162, 162, 162, 1)',
+          'rgba(156, 156, 156, 1)',
+          'rgba(157, 157, 157, 1)',
+          'rgba(146, 146, 146, 1)'
+          ]
+          heatmapNegative.set('gradient', heatmapNegative.get('gradient') ? null : gradientNegative);
+          heatmapNeutral.set('gradient', heatmapNeutral.get('gradient') ? null : gradientNeutral);
+          heatmapNegative.set('radius', heatmapNegative.get('radius') ? null : 30);
+          heatmapNeutral.set('radius', heatmapNeutral.get('radius') ? null : 30);
+          heatmapPositive.set('radius', heatmapPositive.get('radius') ? null : 30);
         }
 
-        // Heatmap data: Positive
-        function getPointPositive() {
-          return [
-            new google.maps.LatLng(34.000471, -81.041786),
-          ];
-        }
-        // Heatmap data: Negative
-        function getPointNegative() {
-          return [
-            new google.maps.LatLng(34.000141, -81.041776),
-          ];
-        }
+        // Call async method and pass the map function as the callback
+        getData(initMap)
     </script>
 
     <script async defer
